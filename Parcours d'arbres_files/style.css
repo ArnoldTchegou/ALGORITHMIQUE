@@ -1,0 +1,10 @@
+/* Time-stamp: <style.css  13 Sep 2004 12:17:05> */
+/* Feuille de style */
+
+/* Fond blanc */
+body { background-color: white; }
+
+/* Equations et figures centrées */
+p.equation, p.figure {
+   text-align: center;
+}

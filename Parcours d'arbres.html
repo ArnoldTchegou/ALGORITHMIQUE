@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0103)https://www.irif.fr/~carton/Enseignement/Algorithmique/LicenceMathInfo/Programmation/Tree/parcours.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <title>
+  Parcours d'arbres
+  </title>
+  <link href="./Parcours d&#39;arbres_files/style.css" rel="stylesheet" type="text/css">
+  
+  <meta name="Author" content="Olivier Carton">
+</head>
+
+<body>
+
+<h1>Parcours d'arbres</h1>
+
+<h2>Introduction</h2>
+
+<p> Un parcours d'arbre est une façon d'ordonner les nœuds d'un arbre
+afin de les parcourir.  On peut le voir comme une fonction qui à un arbre
+associe une liste de ses nœuds même si la liste n'est souvent pas
+explicitement construite par le parcours.  </p>
+
+<p> On distingue essentiellement deux types de parcours : le parcours en
+largeur et les parcours en profondeur.  Parmi les parcours en profondeur,
+on distingue à nouveau le parcours préfixe, le parcours infixe et le
+parcours suffixe.  </p>
+
+<p class="figure">
+    <a name="#fig:arbre"><img width="500" src="./Parcours d&#39;arbres_files/arbre.png"></a> 
+</p>
+
+<h2>Parcours en largeur</h2> 
+
+<h3>Définition et exemple</h3>
+
+<p> Le <em>parcours en largeur</em> consiste à parcourir l'arbre niveau par
+niveau.  Les nœuds de niveau 0 sont sont d'abord parcourus puis les
+nœuds de niveau 1 et ainsi de suite.  Dans chaque niveau, les nœuds
+sont parcourus de la gauche vers la droite.  Le parcours en largeur de
+l'arbre ci-dessus parcours les nœuds dans l'ordre
+[0,1,8,2,4,9,13,3,5,6,10,14,15,7,11,12]. </p>
+
+<h3>Programmation</h3>
+
+<p> Le parcours en largeur se programme à l'aide d'une file (Fifo) de la
+manière suivante.  Les méthodes ci-dessous sont écrite en pseudo-java afin
+d'en alléger la présentation.  Une implémentation simpliste mais véritable
+de ces méthodes peut être consultée <a href="https://www.irif.fr/~carton/Enseignement/Algorithmique/LicenceMathInfo/Programmation/Tree/index.html">ici</a>.
+
+</p><pre>pl(Tree t) {
+    Fifo fifo = new Fifo()      // Création d'une file
+    fifo.put(t.root)            // Mise de la racine dans la file
+    while(!fifo.empty()) {
+	Node n = fifo.get();	// Nouveau noeud à traiter en tête de file
+	traitement(n);		// Traitement du noeud courant 
+	if (n.ls != nil) fifo.put(n.ls);  // Ajout du fils gauche s'il existe
+	if (n.rs != nil) fifo.put(n.rs);  // Ajout du fils droit s'il existe
+    }
+}
+</pre>
+
+<h2>Parcours en profondeurs</h2>
+
+<p> Les parcours en profondeur se définissent de manière récursive sur les
+arbres.  Le parcours d'un arbre consiste à traiter la racine de l'arbre et
+à parcourir récursivement les sous-arbres gauche et droit de la racine.  Les
+parcours préfixe, infixe et suffixe se distinguent par l'ordre dans lequel
+sont faits ces traitements. 
+
+</p><h3>Définitions et exemples</h3>
+
+<p> Dans le <em>parcours préfixe</em>, la racine est traitée avant les
+appels récursifs sur les sous-arbres gauche et droit (faits dans cet
+ordre).  Le parcours préfixe de l'arbre ci-dessus parcourt les nœuds
+dans l'ordre [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].  </p>
+
+<p> Dans le <em>parcours infixe</em>, le traitement de la racine est fait
+entre les appels sur les sous-arbres gauche et droit.  Le parcours infixe
+de l'arbre ci-dessus parcourt les nœuds dans l'ordre
+[3,2,1,5,4,6,7,0,9,11,10,12,8,14,13,15].  </p>
+
+<p> Dans le <em>parcours suffixe</em>, la racine est traitée après les
+appels récursifs sur les sous-arbres gauche et droit (faits dans cet
+ordre).  Le parcours suffixe de l'arbre ci-dessus parcourt les nœuds
+dans l'ordre [3,2,5,7,6,4,1,11,12,10,9,14,15,13,8,0].  </p>
+
+<h3>Programmation récursive</h3>
+
+<p>La définition récursive des trois parcours en profondeur en permet
+une programmation récursive très simple.  Pour parcourir un arbre avec une
+des fonctions de parcours ci-dessous, on appelle la fonction avec la racine
+de l'arbre comme paramètre.  </p>
+
+<pre>prefix(Node n) {
+    traitement(n);
+    if (n.ls != nil) prefix(n.ls);
+    if (n.rs != nil) prefix(n.rs);
+}
+</pre>
+
+<pre>infix(Node n) {
+    if (n.ls != nil) infix(n.ls);
+    traitement(n);
+    if (n.rs != nil) infix(n.rs);
+}
+</pre>
+
+<pre>suffix(Node n) {
+    if (n.ls != nil) suffix(n.ls);
+    if (n.rs != nil) suffix(n.rs);
+    traitement(n);
+}
+</pre>
+
+<h3>Programmation itérative</h3>
+	
+<p> Dans un langage comme Java, il est souvent utile d'avoir des
+<em>itérateurs</em> permettant un parcours en profondeur d'un arbre.  La
+programmation récursive se prête mal à la programmation d'un itérateur.
+</p>
+
+<p class="figure">
+    <a name="#fig:parcours"><img width="500" src="./Parcours d&#39;arbres_files/parcours.png"></a> 
+</p>
+
+<p> La classe <tt>Parcours</tt> définit un objet qui parcourt un arbre de
+manière générique.  L'arbre est parcouru comme s'il s'agissait d'un mur qui
+serait longé par l'objet.  L'objet part de la racine et commence à longer
+le mur en direction du fils gauche de la racine.  Il continue à suivre
+ainsi la branche gauche jusqu'à un nœud qui n'a pas de fils gauche.
+L'objet contourne ce nœud pour suivre le mur jusqu'au fils droit de
+ce nœud.  Si ce fils droit et également absent, l'objet remonte
+jusqu'au père de ce nœud.  Chaque nœud est alors visité trois
+fois : une première fois lorsque l'objet provient du père du nœud,
+une seconde fois après le parcours du sous-arbre gauche du nœud et
+une troisième et dernière fois après le parcours du sous-arbre droit su
+nœud.  Lorsque certains sous-arbres d'un nœud sont vides,
+plusieurs visites d'un même nœud se confondent même s'il faut bien
+les distinguer.  En particulier, les trois visites d'une feuilles sont
+consécutives et se confondent en une seule visite.  </p>
+
+<h4>Avec les liens pères dans les nœuds</h4>
+
+<p> Dans un premier temps, on suppose que chaque nœud possède une
+référence sur son père en plus des références sur ses fils gauche et
+droit.  On suppose donc que la structure <tt>Node</tt> possède les champs
+suivants.  </p> 
+
+<pre>class Node {
+  Node ls;	// Fils gauche
+  Node rs;	// Fils droit
+  Node f;	// Père
+}
+</pre>
+
+
+<pre>class Parcours {
+    Node c;             // Noeud courant
+    // Quatre constantes pour désigner les différentes visites d'un noeud
+    final int prefix = 0; // Première visite  (Préfixe)
+    final int infix  = 1; // Deuxième visite  (Infixe)
+    final int suffix = 2; // Troisième visite (Suffixe)
+    final int fini   = 3; // Parcours terminé
+    int st;             // État : prefix, infix, suffix, ou fini
+    // Constructeur
+    Parcours (Tree t) {
+        if (t.root != nil) {
+            c = t.root;
+            st = prefix;
+        } else 
+	    st = fini;
+    }
+    // Retourne l'état
+    int state() { return st; }
+    // Retourne le noeud courant et passe au noeud suivant
+    Node next() {
+        Node r = c;             // Valeur de retour
+        switch (st) {
+        case prefix:            // Première visite du noeud
+            if (c.ls != nil)    // Si le fils gauche existe,
+                c = c.ls;       // le noeud suivant est le fils gauche.
+            else 
+                st = infix;         // Sinon, on passe à la deuxième visite.
+            break;
+        case infix:             // Deuxième visite du noeud
+            if (c.rs != nil) {  // Si le fils droit existe,
+                c = c.rs;       // le noeud suivant est le fils droit
+                st = prefix;    // et c'est la première visite de ce noeud.
+            } else 
+                st = suffix;    // Sinon, on passe à la troisième visite.
+            break;
+        case suffix:            // Troisième visite du noeud
+            if (c.f != nil) {   // Si le père existe
+                if (c == c.f.ls) {  // et si le noeud est son fils gauche 
+                    st = infix; // et c'est la deuxième visite du père
+                } else {        // Sinon
+                    st = suffix;// et c'est la troisième visite du père.
+                }
+		c = c.f;        // le noeud suivant est le père
+            } else 
+                st = fini;      // Sinon, c'est terminé.
+        }
+        return r;
+    }           
+}
+</pre>    
+
+<p> L'implémentation d'un itérateur préfixe à l'aide de la classe
+<tt>Parcours</tt> devient très simple. </p>
+
+<pre>class ParcoursPrefixe {
+    Parours p;
+    // Constructeur
+    Parcours(Tree t) {
+        p = new Parcours(t);
+    }
+    boolean hasNext() {
+        while(p.state() != p.fini &amp;&amp; p.state() != p.prefix)
+            p.next();
+        return p.state() == p.prefix;
+    }
+    Node next() {
+        if (hasNext()) 
+            return p.next();
+        else
+            throw new NoSuchElementException()
+    }
+}
+</pre>
+
+<p> L'implémentation d'un parcours infixe ou suffixe est très similaire. Il
+suffit de remplacer chaque occurence de <tt>p.p</tt> par <tt>p.i</tt> ou
+par <tt>p.s</tt> </p>
+
+<h4>Sans les liens père dans les nœuds</h4>
+
+<p> On suppose maintenant que chaque nœud ne possède pas de référence sur
+son père en plus des références sur ses fils gauche et droit.  On suppose
+donc que la structure <tt>Node</tt> possède uniquement les champs suivants.
+</p>
+
+<pre>class Node {
+  Node ls;      // Fils gauche
+  Node rs;      // Fils droit
+}
+</pre>
+
+<p> Dans l'implémentation de la classe <tt>Parcours</tt>, il est alors
+nécessaire de mémoriser le chemin de la racine au nœud courant afin de
+pouvoir remonter au père lorsque c'est nécessaire.  La suite des nœuds
+de la racine au nœud courant est alors mémoriser dans une pile (Lifo).
+L'implémentation de la classe <tt>Parcours</tt> devient la suivante.</p>
+
+<pre>class Parcours {
+    Node c;             // Noeud courant
+    Lifo b;             // Branche de la racine au noeud courant
+                        // Le noeud courant n'est pas mis dans la pile.
+    // Quatre constantes pour désigner les différentes visites d'un noeud
+    final int prefix = 0; // Première visite  (Préfixe)
+    final int infix  = 1; // Deuxième visite  (Infixe)
+    final int suffix = 2; // Troisième visite (Suffixe)
+    final int fini   = 3; // Parcours terminé
+    int st;             // État : p, i, s, ou f
+    // Constructeur
+    Parcours (Tree t) {
+        b = new ListLifo();     // Création de la pile
+        if (t.root != nil) {
+            c = t.root;
+            st = prefix;
+        } else 
+	    st = fini;
+    }
+    // Retourne l'état
+    int state() { return st; }
+    // Retourne le noeud courant et passe au noeud suivant
+    Node next() {
+        Node r = c;             // Valeur de retour
+        switch (st) {
+        case prefix:            // Première visite du noeud
+            if (c.ls != nil) {  // Si le fils gauche existe,
+                b.put(c);       // on ajoute le noeud courant à la branche
+                c = c.ls;       // et le noeud suivant est le fils gauche.
+            } else 
+                st = infix;     // Sinon, on passe à la deuxième visite.
+            break;
+        case i:                 // Deuxième visite du noeud
+            if (c.rs != nil) {  // Si le fils droit existe,
+                b.put(c);       // on ajoute le noeud courant à la branche,
+                c = c.rs;       // le noeud suivant est le fils droit
+                st = prefix;    // et c'est la première visite de ce noeud.
+            } else 
+                st = suffix;    // Sinon, on passe à la troisième visite.
+            break;
+        case s:                 // Troisième visite du noeud
+            if (!b.empty()) {   // Si la branche n'est pas vide,
+                Node f = b.get(); // le père est retiré de la branche.
+                if (c == f.ls) {  // Si le noeud est son fils gauche,
+                    st = infix; // et c'est la deuxième visite du père
+                } else {        // Sinon
+                    st = suffix;// et c'est la troisième visite du père.
+                }
+                c = f;          // le noeud suivant est le père
+            } else {
+                st = fini;      // Sinon, c'est terminé.
+            }
+        }
+        return r;
+    }
+}             
+</pre>    
+
+<p> L'implémentation de la classe <tt>ParcoursPrefixe</tt> reste identique.
+</p>
+
+<h4>Parcours préfixe amélioré</h4>
+
+<p> Au lieu d'utiliser un objet de la classe <tt>Parcours</tt>, le parcours
+préfixe peut être programmé de manière directe.  On obtient alors une
+implémentation plus efficace.  L'idée générale est de stocker dans la pile
+non pas le nœuds de la branche jusqu'au nœud courant mais de
+stocker les racines des sous-arbres qui restent à traiter.  On peut
+remarquer que ces racines sont les fils droits de la branche jusqu'au
+nœud courant à chaque fois que la branche part à gauche.  </p>
+
+<pre>class ParcoursPrefixe {
+    Lifo b;             // Pile des racines des sous-arbres à parcourir
+    // Constructeur
+    Parcours(Tree t) {
+        b = new ListLifo();     // Création de la pile
+	if (t.root != nil) 
+            b.put(t.root);      // La racine est le premier noeud à traiter
+    }
+    boolean hasNext() {
+        return !b.empty();      // La pile contient les racines des 
+    }	                        // sous-arbres encore à traiter
+    Node next() {
+        if (hasNext()) {
+            Node c = b.get();	// Noeud à traiter
+	    if (c.rs != nil) n.put(c.rs);  // Empilement du fils droit
+	    if (c.ls != nil) n.put(c.ls);  // Empilement du fils gauche
+	    return c;
+        } else
+            throw new NoSuchElementException()
+    }
+}
+</pre>
+
+
+
+</body></html>
